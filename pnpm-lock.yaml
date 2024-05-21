@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@kinde-oss/kinde-auth-nextjs':
-        specifier: ^2.2.8
-        version: 2.2.8(@babel/core@7.24.5)(next@14.2.3(@babel/core@7.24.5)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: ^2.2.10
+        version: 2.2.10(@babel/core@7.24.5)(next@14.2.3(@babel/core@7.24.5)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@radix-ui/react-slot':
         specifier: ^1.0.2
         version: 1.0.2(@types/react@18.3.2)(react@18.3.1)
@@ -91,7 +91,7 @@ importers:
         specifier: ^3.4.3
         version: 3.4.3
       typescript:
-        specifier: ^5
+        specifier: ^5.4.5
         version: 5.4.5
 
 packages:
@@ -740,15 +740,15 @@ packages:
   '@jridgewell/trace-mapping@0.3.25':
     resolution: {integrity: sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ==}
 
-  '@kinde-oss/kinde-auth-nextjs@2.2.8':
-    resolution: {integrity: sha512-Ke/H7YWxZKNWVa6GynStD3Z0wL7dr12JL2WpvCTuO8thGKyIPFA/OTUaooWSny4CuEKd+Bo+jGFH9oh+ymCLJg==}
+  '@kinde-oss/kinde-auth-nextjs@2.2.10':
+    resolution: {integrity: sha512-tx0+0O6BtnD2yjos8rZLTAViJ0HMQb9xHvb8I9asU2l2bRA8JUlVKnsYjCOc8iWqYXwllJ9HFCXr1cD9eSkCzg==}
     peerDependencies:
       next: ^12.2.5 || ^13 || ^14
       react: ^18.1.0
       react-dom: ^18.1.0
 
-  '@kinde-oss/kinde-typescript-sdk@2.9.0':
-    resolution: {integrity: sha512-wCu9eRAyNWp5AVv5QWaY4wrdQiAR9tYkBnQXeYshmbTRRMr/sm57+Td09ZabXorE4sPk4uB2tXBlaczJvnakXA==}
+  '@kinde-oss/kinde-typescript-sdk@2.9.1':
+    resolution: {integrity: sha512-3BBFQ3/WgAgoWigfpK9ItUkpyleuHN14in+V44NLWi+zHwE1B8II/HR5CHhw+s6qR1wyJwQh4ddz2tUJwEXysg==}
 
   '@next/env@14.2.3':
     resolution: {integrity: sha512-W7fd7IbkfmeeY2gXrzJYDx8D2lWKbVoTIj1o1ScPHNzvp30s1AuoEFSdr39bC5sjxJaxTtq3OTCZboNp0lNWHA==}
@@ -1377,8 +1377,8 @@ packages:
   ee-first@1.1.1:
     resolution: {integrity: sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==}
 
-  electron-to-chromium@1.4.773:
-    resolution: {integrity: sha512-87eHF+h3PlCRwbxVEAw9KtK3v7lWfc/sUDr0W76955AdYTG4bV/k0zrl585Qnj/skRMH2qOSiE+kqMeOQ+LOpw==}
+  electron-to-chromium@1.4.775:
+    resolution: {integrity: sha512-JpOfl1aNAiZ88wFzjPczTLwYIoPIsij8S9/XQH9lqMpiJOf23kxea68B8wje4f68t4rOIq4Bh+vP4I65njiJBw==}
 
   emoji-regex@8.0.0:
     resolution: {integrity: sha512-MSjYzcWNOA0ewAHpz0MxpYFvwg6yjy1NG3xteoqz644VCo/RPgnr1/GGt+ic3iJTzQ8Eu3TdM14SawnVUmGE6A==}
@@ -3671,10 +3671,10 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.4.15
 
-  '@kinde-oss/kinde-auth-nextjs@2.2.8(@babel/core@7.24.5)(next@14.2.3(@babel/core@7.24.5)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+  '@kinde-oss/kinde-auth-nextjs@2.2.10(@babel/core@7.24.5)(next@14.2.3(@babel/core@7.24.5)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@babel/preset-env': 7.24.5(@babel/core@7.24.5)
-      '@kinde-oss/kinde-typescript-sdk': 2.9.0
+      '@kinde-oss/kinde-typescript-sdk': 2.9.1
       cookie: 0.6.0
       crypto-js: 4.2.0
       jwt-decode: 3.1.2
@@ -3686,7 +3686,7 @@ snapshots:
       - '@babel/core'
       - supports-color
 
-  '@kinde-oss/kinde-typescript-sdk@2.9.0':
+  '@kinde-oss/kinde-typescript-sdk@2.9.1':
     dependencies:
       jose: 5.3.0
       uncrypto: 0.1.3
@@ -4106,7 +4106,7 @@ snapshots:
   browserslist@4.23.0:
     dependencies:
       caniuse-lite: 1.0.30001618
-      electron-to-chromium: 1.4.773
+      electron-to-chromium: 1.4.775
       node-releases: 2.0.14
       update-browserslist-db: 1.0.16(browserslist@4.23.0)
 
@@ -4342,7 +4342,7 @@ snapshots:
 
   ee-first@1.1.1: {}
 
-  electron-to-chromium@1.4.773: {}
+  electron-to-chromium@1.4.775: {}
 
   emoji-regex@8.0.0: {}
 
