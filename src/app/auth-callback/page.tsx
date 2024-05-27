@@ -1,7 +1,7 @@
 'use client';
 
-import React, { Suspense } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
+import React, { Suspense, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Loader2 } from 'lucide-react';
 import { trpc } from '../_trpc/client';
 
@@ -10,21 +10,17 @@ const Page = () => {
   const searchParams = useSearchParams();
   const origin = searchParams.get('origin');
 
-  const { data, error } = trpc.authCallback.useQuery(undefined, {
-    retry: true,
-    retryDelay: 500,
-  });
+  const { data, error } = trpc.authCallback.useQuery(undefined, {});
 
-  if (error) {
-    if (error.data?.code === 'UNAUTHORIZED') {
-      router.push('/sign-in');
+  useEffect(() => {
+    if (error) {
+      if (error.data?.code === 'UNAUTHORIZED') {
+        router.push('/sign-in');
+      }
+    } else if (data && data.success) {
+      router.push(origin ? `/${origin}` : '/dashboard');
     }
-    return null;
-  }
-
-  if (data && data.success) {
-    router.push(origin ? `/${origin}` : '/dashboard');
-  }
+  }, [router, error, data, origin]);
 
   return (
     <div className="w-full mt-24 flex justify-center">
@@ -39,7 +35,7 @@ const Page = () => {
 
 const SuspensePage = () => {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense>
       <Page />
     </Suspense>
   );
