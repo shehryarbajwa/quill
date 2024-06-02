@@ -15,8 +15,6 @@ const Page = async ({ params }: PageProps) => {
   //Make DB Call
   const { fileid } = params;
 
-  console.log('fileid', fileid);
-
   const { getUser } = getKindeServerSession();
   const user = await getUser();
 
