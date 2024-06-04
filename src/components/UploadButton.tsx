@@ -4,14 +4,71 @@ import { useState } from 'react';
 import { Dialog, DialogContent, DialogTrigger } from './ui/dialog';
 import { Button } from './ui/button';
 import Dropzone from 'react-dropzone';
-import { Cloud } from 'lucide-react';
+import { Cloud, File } from 'lucide-react';
+import { Progress } from './ui/progress';
+import { resolve } from 'path';
+import { useUploadThing } from '@/lib/uploadthing';
+import { useToast } from './ui/use-toast';
 
 const UploadDropzone = () => {
+  const [isUploading, setIsUploading] = useState<boolean>(true);
+
+  const [uploadProgress, setUploadProgress] = useState<number>(0);
+
+  const { toast } = useToast();
+
+  const startSimulatedProgress = () => {
+    setUploadProgress(0);
+    const interval = setInterval(() => {
+      setUploadProgress((prevProgress) => {
+        if (prevProgress > 95) {
+          clearInterval(interval);
+          return prevProgress;
+        }
+        return prevProgress + 5;
+      });
+    }, 500);
+
+    return interval;
+  };
+
+  const { startUpload } = useUploadThing('pdfUploader');
+
   return (
     <Dropzone
       multiple={false}
       onDrop={async (acceptedFile) => {
-        console.log;
+        setIsUploading(true);
+        const progressInterval = startSimulatedProgress();
+
+        //handle file uploading
+        //using await, execution of the function is paused, until the Promise returns the result
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+
+        const res = await startUpload(acceptedFile);
+
+        if (!res) {
+          return toast({
+            title: 'Something went wrong',
+            description: 'Please try again later',
+            variant: 'destructive',
+          });
+        }
+
+        const [fileResponse] = res;
+
+        const key = fileResponse.key;
+
+        if (!key) {
+          return toast({
+            title: 'Something went wrong',
+            description: 'Please try again later',
+            variant: 'destructive',
+          });
+        }
+
+        clearInterval(progressInterval);
+        setUploadProgress(100);
       }}
     >
       {({ getRootProps, getInputProps, acceptedFiles }) => (
@@ -36,11 +93,20 @@ const UploadDropzone = () => {
               {acceptedFiles && acceptedFiles[0] ? (
                 <div className="max-w-xs bg-white flex items-center rounded-md overflow-hidden outline outline-[1px] outline-zinc-200 divide-x divide-zinc-200">
                   <div className="px-3 py-2 h-full grid place-items-center">
-                    {/* <File className="h-4 w-4 text-blue-500" /> */}
+                    <File className="h-4 w-4 text-blue-500" />
                   </div>
                   <div className="px-3 py-2 h-full text-sm truncate">
                     {acceptedFiles[0].name}
                   </div>
+                </div>
+              ) : null}
+
+              {isUploading ? (
+                <div className="w-4 mt-4 max-w-sm mx-auto ">
+                  <Progress
+                    value={uploadProgress}
+                    className="h1 w-full bg-zinc-200"
+                  />
                 </div>
               ) : null}
 
