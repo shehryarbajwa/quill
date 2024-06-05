@@ -1,19 +1,24 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Dialog, DialogContent, DialogTrigger } from './ui/dialog';
 import { Button } from './ui/button';
 import Dropzone from 'react-dropzone';
-import { Cloud, File } from 'lucide-react';
+import { Cloud, File, Router } from 'lucide-react';
 import { Progress } from './ui/progress';
 import { resolve } from 'path';
 import { useUploadThing } from '@/lib/uploadthing';
 import { useToast } from './ui/use-toast';
+import { trpc } from '@/app/_trpc/client';
+import { useRouter } from 'next/router';
 
 const UploadDropzone = () => {
+  // const router = useRouter();
   const [isUploading, setIsUploading] = useState<boolean>(true);
 
   const [uploadProgress, setUploadProgress] = useState<number>(0);
+
+  const [fileKey, setFileKey] = useState<string | null>(null);
 
   const { toast } = useToast();
 
@@ -31,8 +36,23 @@ const UploadDropzone = () => {
 
     return interval;
   };
-
   const { startUpload } = useUploadThing('pdfUploader');
+
+  useEffect(() => {
+    if (fileKey) {
+      const handlePolling = async (key: string) => {
+        const { data, error } = await trpc.getFile.useQuery({ key });
+        if (data) {
+          console.log('data', data);
+          // router.push(`/dashboard/${data.id}`);
+        } else if (error) {
+          console.error('Error fetching file:', error);
+        }
+      };
+
+      handlePolling(fileKey);
+    }
+  }, [fileKey]);
 
   return (
     <Dropzone
@@ -44,12 +64,14 @@ const UploadDropzone = () => {
         //handle file uploading
         //using await, execution of the function is paused, until the Promise returns the result
         await new Promise((resolve) => setTimeout(resolve, 1000));
-
+        console.log('accepted', acceptedFile);
         const res = await startUpload(acceptedFile);
+
+        console.log('res', res);
 
         if (!res) {
           return toast({
-            title: 'Something went wrong',
+            title: 'Something went Lull',
             description: 'Please try again later',
             variant: 'destructive',
           });
@@ -66,6 +88,8 @@ const UploadDropzone = () => {
             variant: 'destructive',
           });
         }
+
+        setFileKey(key);
 
         clearInterval(progressInterval);
         setUploadProgress(100);
