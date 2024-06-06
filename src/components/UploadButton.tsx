@@ -37,7 +37,6 @@ const UploadDropzone = () => {
       setUploadProgress((prevProgress) => {
         if (prevProgress >= 95) {
           clearInterval(interval);
-
           return prevProgress + 5;
         }
 
