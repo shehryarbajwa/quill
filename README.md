@@ -3,8 +3,7 @@
 Built with the Next.js 13.5 App Router, tRPC, TypeScript, Prisma & Tailwind
 
 ![Project Image](https://github.com/shehryarbajwa/quill/blob/master/public/thumbnail.png)
-![Project Image](https://github.com/shehryarbajwa/quill/blob/master/public/dashboard-first-preview.png)
-![Project Image](https://github.com/shehryarbajwa/quill/blob/master/public/dashboard-preview.jpg)
+![Project Image](https://github.com/shehryarbajwa/quill/blob/master/public/quill.png)
 
 ## Features
 
