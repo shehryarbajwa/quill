@@ -1,77 +1,66 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import Dropzone from 'react-dropzone';
+import { Cloud, File, Loader2 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+
 import { Dialog, DialogContent, DialogTrigger } from './ui/dialog';
 import { Button } from './ui/button';
-import Dropzone from 'react-dropzone';
-import { Cloud, File, Router } from 'lucide-react';
 import { Progress } from './ui/progress';
-import { resolve } from 'path';
 import { useUploadThing } from '@/lib/uploadthing';
 import { useToast } from './ui/use-toast';
 import { trpc } from '@/app/_trpc/client';
-import { useRouter } from 'next/router';
 
 const UploadDropzone = () => {
-  // const router = useRouter();
-  const [isUploading, setIsUploading] = useState<boolean>(true);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
-  const [uploadProgress, setUploadProgress] = useState<number>(0);
-
-  const [fileKey, setFileKey] = useState<string | null>(null);
+  const router = useRouter();
 
   const { toast } = useToast();
 
+  const { startUpload } = useUploadThing('pdfUploader');
+
+  const { mutate: startPolling } = trpc.getFile.useMutation({
+    onSuccess: (file) => {
+      router.push(`/dashboard/${file.id}`);
+    },
+    retry: true,
+    retryDelay: 500,
+  });
+
   const startSimulatedProgress = () => {
     setUploadProgress(0);
+
     const interval = setInterval(() => {
       setUploadProgress((prevProgress) => {
-        if (prevProgress > 95) {
+        if (prevProgress >= 95) {
           clearInterval(interval);
-          return prevProgress;
+
+          return prevProgress + 5;
         }
+
         return prevProgress + 5;
       });
     }, 500);
 
     return interval;
   };
-  const { startUpload } = useUploadThing('pdfUploader');
-
-  useEffect(() => {
-    if (fileKey) {
-      const handlePolling = async (key: string) => {
-        const { data, error } = await trpc.getFile.useQuery({ key });
-        if (data) {
-          console.log('data', data);
-          // router.push(`/dashboard/${data.id}`);
-        } else if (error) {
-          console.error('Error fetching file:', error);
-        }
-      };
-
-      handlePolling(fileKey);
-    }
-  }, [fileKey]);
 
   return (
     <Dropzone
       multiple={false}
       onDrop={async (acceptedFile) => {
         setIsUploading(true);
+
         const progressInterval = startSimulatedProgress();
 
-        //handle file uploading
-        //using await, execution of the function is paused, until the Promise returns the result
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        console.log('accepted', acceptedFile);
         const res = await startUpload(acceptedFile);
-
-        console.log('res', res);
 
         if (!res) {
           return toast({
-            title: 'Something went Lull',
+            title: 'Something went wrong',
             description: 'Please try again later',
             variant: 'destructive',
           });
@@ -80,7 +69,6 @@ const UploadDropzone = () => {
         const [fileResponse] = res;
 
         const key = fileResponse.key;
-
         if (!key) {
           return toast({
             title: 'Something went wrong',
@@ -89,10 +77,10 @@ const UploadDropzone = () => {
           });
         }
 
-        setFileKey(key);
-
         clearInterval(progressInterval);
         setUploadProgress(100);
+
+        startPolling({ key });
       }}
     >
       {({ getRootProps, getInputProps, acceptedFiles }) => (
@@ -111,7 +99,7 @@ const UploadDropzone = () => {
                   <span className="font-semibold">Click to upload</span> or drag
                   and drop
                 </p>
-                <p className="text-xs text-zinc-500">PDF (up to 4 MB)</p>
+                <p className="text-xs text-zinc-500">PDF up to 16 MB</p>
               </div>
 
               {acceptedFiles && acceptedFiles[0] ? (
@@ -126,11 +114,18 @@ const UploadDropzone = () => {
               ) : null}
 
               {isUploading ? (
-                <div className="w-4 mt-4 max-w-sm mx-auto ">
+                <div className="w-full mt-4 max-w-xs mx-auto">
                   <Progress
+                    color={uploadProgress === 100 ? 'bg-green-500' : ''}
                     value={uploadProgress}
-                    className="h1 w-full bg-zinc-200"
+                    className="h-1 w-full bg-zinc-200"
                   />
+                  {uploadProgress === 100 ? (
+                    <div className="flex gap-1 items-center justify-center text-sm text-zinc-700 text-center pt-2">
+                      <Loader2 className="h-3 w-3 animate-spin" />
+                      Upload is Complete. Redirecting...
+                    </div>
+                  ) : null}
                 </div>
               ) : null}
 
@@ -149,26 +144,23 @@ const UploadDropzone = () => {
 };
 
 const UploadButton = () => {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <>
-      <Dialog
-        open={isOpen}
-        onOpenChange={(v) => {
-          if (!v) {
-            setIsOpen(v);
-          }
-        }}
-      >
-        <DialogTrigger onClick={() => setIsOpen(true)} asChild>
-          <Button>Upload PDF</Button>
-        </DialogTrigger>
-        <DialogContent>
-          <UploadDropzone />
-        </DialogContent>
-      </Dialog>
-    </>
+    <Dialog
+      open={isOpen}
+      onOpenChange={(v) => {
+        if (!v) setIsOpen(v);
+      }}
+    >
+      <DialogTrigger onClick={() => setIsOpen(true)} asChild>
+        <Button>Upload PDF</Button>
+      </DialogTrigger>
+
+      <DialogContent>
+        <UploadDropzone />
+      </DialogContent>
+    </Dialog>
   );
 };
 
