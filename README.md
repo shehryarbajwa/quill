@@ -7,6 +7,7 @@ Built with the Next.js 13.5 App Router, tRPC, TypeScript, Prisma & Tailwind
 ## Features
 
 - 🛠️ Complete SaaS Built From Scratch
+- 🔧 Stripe Integration
 - 💻 Beautiful Landing Page & Pricing Page Included
 - 💳 Free & Pro Plan Using Stripe
 - 📄 A Beautiful And Highly Functional PDF Viewer
