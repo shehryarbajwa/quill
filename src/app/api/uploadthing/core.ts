@@ -24,10 +24,17 @@ export const ourFileRouter = {
       return { userId: user.id };
     })
     .onUploadComplete(async ({ metadata, file }) => {
-      console.log("Upload complete for userId:", metadata.userId);
-      console.log("file url", file.url);
-      console.log('metadata', { metadata: metadata.userId, file: file.name })
-      return
+      const createdFile = await db.file.create(
+        {
+          data: {
+            key: file.name,
+            name: file.name,
+            userId: metadata.userId,
+            url: `https://uploadthing-prod-sea1.s3.us-west-2.amazonaws.com/${file.key}`,
+            uploadStatus: "PROCESSING"
+          }
+        }
+      )
     })
 } satisfies FileRouter;
 

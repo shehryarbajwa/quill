@@ -26,7 +26,7 @@ const UploadDropzone = () => {
       router.push(`/dashboard/${file.id}`);
     },
     retry: true,
-    retryDelay: 10000,
+    retryDelay: 500,
   });
 
   const startSimulatedProgress = () => {
