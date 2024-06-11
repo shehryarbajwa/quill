@@ -1,42 +1,34 @@
-import { File } from 'lucide-react';
-import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
-import { createUploadthing, type FileRouter } from "uploadthing/next";
-import { UploadThingError } from "uploadthing/server";
-import { db } from '@/db';
+import { db } from '@/db'
+import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server'
+
+import {
+  createUploadthing,
+  type FileRouter,
+} from 'uploadthing/next'
 
 const f = createUploadthing();
 
-// FileRouter for your app, can contain multiple FileRoutes
 export const ourFileRouter = {
-  // Define as many FileRoutes as you like, each with a unique routeSlug
   pdfUploader: f({ pdf: { maxFileSize: "16MB" } })
-    // Set permissions and file types for this FileRoute
     .middleware(async ({ req }) => {
-
+      console.log('Middleware started');
       const { getUser } = getKindeServerSession();
-
       const user = await getUser();
 
-      if (!user || !user.id) throw new Error("UNAUTHORIZED")
+      if (!user || !user.id) {
+        console.error('Unauthorized access');
+        throw new Error("Unauthorized");
+      }
 
-
-
-      return {
-        userId: user.id
-      };
+      console.log('Middleware completed', { userId: user.id });
+      return { userId: user.id };
     })
     .onUploadComplete(async ({ metadata, file }) => {
-      console.log('Got here')
-      const createdFile = await db.file.create({
-        data: {
-          key: file.key,
-          name: file.name,
-          userId: metadata.userId,
-          url: `https://uploadthing-prod.s3.us-west-2.amazonaws.com/${file.key}`,
-          uploadStatus: "PROCESSING"
-        }
-      })
-    }),
+      console.log("Upload complete for userId:", metadata.userId);
+      console.log("file url", file.url);
+      console.log('metadata', { metadata: metadata.userId, file: file.name })
+      return
+    })
 } satisfies FileRouter;
 
 export type OurFileRouter = typeof ourFileRouter;
