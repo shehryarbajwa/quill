@@ -1,8 +1,10 @@
-// Load environment variables from .env file
-import * as dotenv from 'dotenv';
-dotenv.config();
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // Your existing configuration here
+  webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
+    config.resolve.alias.canvas = false;
+    config.resolve.alias.encoding = false;
+    return config;
+  },
 };
 export default nextConfig;

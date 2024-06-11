@@ -11,16 +11,16 @@ const f = createUploadthing();
 export const ourFileRouter = {
   pdfUploader: f({ pdf: { maxFileSize: "16MB" } })
     .middleware(async ({ req }) => {
-      console.log('Middleware started');
+
       const { getUser } = getKindeServerSession();
       const user = await getUser();
 
       if (!user || !user.id) {
-        console.error('Unauthorized access');
+
         throw new Error("Unauthorized");
       }
 
-      console.log('Middleware completed', { userId: user.id });
+
       return { userId: user.id };
     })
     .onUploadComplete(async ({ metadata, file }) => {
