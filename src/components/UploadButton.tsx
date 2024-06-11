@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Dialog, DialogContent, DialogTrigger } from './ui/dialog';
 import { Button } from './ui/button';
 
@@ -17,17 +17,25 @@ const UploadDropzone = () => {
 
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
+  const [fileKey, setFileKey] = useState('');
   const { toast } = useToast();
 
   const { startUpload } = useUploadThing('pdfUploader');
 
-  const { mutate: startPolling } = trpc.getFile.useMutation({
-    onSuccess: (file) => {
-      router.push(`/dashboard/${file.id}`);
-    },
-    retry: true,
-    retryDelay: 500,
-  });
+  {
+    /*Here We use Polling using GET instead of POST */
+  }
+
+  const fileQuery = trpc.getFile.useQuery(
+    { key: fileKey },
+    { refetchInterval: 5000 } // Poll every 5000 milliseconds (5 seconds)
+  );
+
+  useEffect(() => {
+    if (fileQuery.data) {
+      router.push(`/dashboard/${fileQuery.data.file.id}`);
+    }
+  }, [router, fileQuery.data, fileKey]);
 
   const startSimulatedProgress = () => {
     setUploadProgress(0);
@@ -80,7 +88,7 @@ const UploadDropzone = () => {
         setUploadProgress(100);
         console.log('Polling begins');
 
-        startPolling({ key });
+        setFileKey(key);
       }}
     >
       {({ getRootProps, getInputProps, acceptedFiles }) => (
