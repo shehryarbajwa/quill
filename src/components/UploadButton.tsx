@@ -86,7 +86,6 @@ const UploadDropzone = () => {
 
         clearInterval(progressInterval);
         setUploadProgress(100);
-        console.log('Polling begins');
 
         setFileKey(key);
       }}

@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "NODE_ENV=development next build",
-    "start": "NODE_ENV=development next start",
+    "build": "next build",
+    "start": "next start",
     "lint": "next lint",
     "project": "next build && next start"
   },
@@ -38,6 +38,7 @@
     "react-dropzone": "^14.2.3",
     "react-loading-skeleton": "^3.4.0",
     "react-pdf": "^9.0.0",
+    "react-resize-detector": "^11.0.1",
     "shadcn-ui": "^0.8.0",
     "tailwind": "^4.0.0",
     "tailwind-merge": "^2.3.0",
