@@ -43,6 +43,7 @@
     "react-pdf": "^9.0.0",
     "react-resize-detector": "^11.0.1",
     "shadcn-ui": "^0.8.0",
+    "simplebar-react": "^3.2.6",
     "tailwind": "^4.0.0",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
