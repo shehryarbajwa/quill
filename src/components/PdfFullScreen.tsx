@@ -28,6 +28,9 @@ const PdfFullscreen = ({ fileUrl }: PdfFullscreenProps) => {
         }
       }}
     >
+      {/* Here asChild allows Button to be rendered. By using asChild, we enable the rendering of the component to the child element. This is used when a component can be used in multiple ways. 
+      For example when you have a Button that wants to work like a Link
+      */}
       <DialogTrigger onClick={() => setIsOpen(true)} asChild>
         <Button variant="ghost" className="gap-1.5" aria-label="fullscreen">
           <Expand className="h-4 w-4" />
