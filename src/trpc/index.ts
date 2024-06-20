@@ -7,6 +7,8 @@ import { z } from 'zod';
 {/*authCallBack is a GET request. Client side makes a GET request and the function checks if the user exists from Kinde. 
 If not, sends error 400 type. Then checks If user exists in db, if not 
 then create it in DB  */}
+type UploadStatus = 'PENDING' | 'PROCESSING' | 'SUCCESS' | 'FAILED';
+
 export const appRouter = router({
   authCallback: publicProcedure.query(async () => {
     const { getUser } = getKindeServerSession();
@@ -42,6 +44,23 @@ export const appRouter = router({
     })
 
   }),
+
+  getFileUploadStatus: privateProcedure
+    .input(z.object({ fileId: z.string() }))
+    .query(async ({ input, ctx }): Promise<{ status: UploadStatus }> => {
+      const file = await db.file.findFirst({
+        where: {
+          id: input.fileId,
+          userId: ctx.userId,
+        },
+      });
+
+      if (!file) {
+        return { status: 'PENDING' as const };
+      }
+
+      return { status: file.uploadStatus };
+    }),
   getFile: privateProcedure
     .input(z.object({ key: z.string() }))
     .query(async ({ ctx, input }) => {
