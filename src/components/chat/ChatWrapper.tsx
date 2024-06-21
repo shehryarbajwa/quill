@@ -1,37 +1,45 @@
 'use client';
 
 import { trpc } from '@/app/_trpc/client';
-import Messages from './Messages';
 import ChatInput from './ChatInput';
-import { ChevronLeft, Link, Loader2, XCircle } from 'lucide-react';
+import Messages from './Messages';
+import { ChevronLeft, Loader2, XCircle } from 'lucide-react';
+import Link from 'next/link';
 import { buttonVariants } from '../ui/button';
 
 interface ChatWrapperProps {
   fileId: string;
+  isSubscribed: boolean;
 }
 
 const ChatWrapper = ({ fileId }: ChatWrapperProps) => {
+  {
+    /*Is Loading is provided by .useQuery for when the query is still being loaded from the db */
+  }
   const { data, isLoading } = trpc.getFileUploadStatus.useQuery(
     {
       fileId,
     },
     {
-      refetchInterval: (query) => {
-        return query.state.data?.status === 'SUCCESS' ||
-          query.state.data?.status === 'FAILED'
+      refetchInterval: (query) =>
+        query.state.data?.status === 'SUCCESS' ||
+        query.state.data?.status === 'FAILED'
           ? false
-          : 500;
-      },
+          : 500,
     }
   );
 
   if (isLoading)
     return (
-      <div className="relative min-h-full bg-zinc-50 divide-y divide-zinc-200 flex-col justify-between gap-2">
+      <div className="relative min-h-full bg-zinc-50 flex divide-y divide-zinc-200 flex-col justify-between gap-2">
         <div className="flex-1 flex justify-center items-center flex-col mb-28">
-          <Loader2 className="h-8 w-8 text-blue-500 animate-spin" />
-          <h3 className="font-semibold text-xl">Loading...</h3>
-          <p className="text-zinc-500 text-sm">We&apos;re preparing your PDF</p>
+          <div className="flex flex-col items-center gap-2">
+            <Loader2 className="h-8 w-8 text-blue-500 animate-spin" />
+            <h3 className="font-semibold text-xl">Loading...</h3>
+            <p className="text-zinc-500 text-sm">
+              We&apos;re preparing your PDF.
+            </p>
+          </div>
         </div>
 
         <ChatInput isDisabled />
@@ -40,11 +48,13 @@ const ChatWrapper = ({ fileId }: ChatWrapperProps) => {
 
   if (data?.status === 'PROCESSING')
     return (
-      <div className="relative min-h-full bg-zinc-50 divide-y divide-zinc-200 flex-col justify-between gap-2">
+      <div className="relative min-h-full bg-zinc-50 flex divide-y divide-zinc-200 flex-col justify-between gap-2">
         <div className="flex-1 flex justify-center items-center flex-col mb-28">
-          <Loader2 className="h-8 w-8 text-blue-500 animate-spin" />
-          <h3 className="font-semibold text-xl">Processing PDF...</h3>
-          <p className="text-zinc-500 text-sm">This won&apos;t take long.</p>
+          <div className="flex flex-col items-center gap-2">
+            <Loader2 className="h-8 w-8 text-blue-500 animate-spin" />
+            <h3 className="font-semibold text-xl">Processing PDF...</h3>
+            <p className="text-zinc-500 text-sm">This won&apos;t take long.</p>
+          </div>
         </div>
 
         <ChatInput isDisabled />
@@ -53,24 +63,26 @@ const ChatWrapper = ({ fileId }: ChatWrapperProps) => {
 
   if (data?.status === 'FAILED')
     return (
-      <div className="relative min-h-full bg-zinc-50 divide-y divide-zinc-200 flex-col justify-between gap-2">
+      <div className="relative min-h-full bg-zinc-50 flex divide-y divide-zinc-200 flex-col justify-between gap-2">
         <div className="flex-1 flex justify-center items-center flex-col mb-28">
-          <XCircle className="h-8 w-8 text-red-500" />
-          <h3 className="font-semibold text-xl">Too many pages in PDF</h3>
-          <p className="text-zinc-500 text-sm">
-            Your <span className="font-medium">Free</span> plan supports upto 5
-            pages
-          </p>
-          <Link
-            href="/dashboard"
-            className={buttonVariants({
-              variant: 'secondary',
-              className: 'mt-4',
-            })}
-          >
-            <ChevronLeft className="h-3 w-3 mr-1.5" />
-            Back
-          </Link>
+          <div className="flex flex-col items-center gap-2">
+            <XCircle className="h-8 w-8 text-red-500" />
+            <h3 className="font-semibold text-xl">Too many pages in PDF</h3>
+            <p className="text-zinc-500 text-sm">
+              Your <span className="font-medium"></span> plan supports up to 5
+              pages per PDF.
+            </p>
+            <Link
+              href="/dashboard"
+              className={buttonVariants({
+                variant: 'secondary',
+                className: 'mt-4',
+              })}
+            >
+              <ChevronLeft className="h-3 w-3 mr-1.5" />
+              Back
+            </Link>
+          </div>
         </div>
 
         <ChatInput isDisabled />
@@ -83,7 +95,7 @@ const ChatWrapper = ({ fileId }: ChatWrapperProps) => {
         <Messages />
       </div>
 
-      {/* <ChatInput /> */}
+      <ChatInput />
     </div>
   );
 };

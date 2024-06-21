@@ -33,8 +33,13 @@ export const ourFileRouter = {
             url: `https://uploadthing-prod-sea1.s3.us-west-2.amazonaws.com/${file.key}`,
             uploadStatus: "PROCESSING"
           }
-        }
-      )
+        })
+      try {
+        const response = await fetch(`https://uploadthing-prod-sea1.s3.us-west-2.amazonaws.com/${file.key}`)
+        const blob = await response.blob()
+      } catch {
+
+      }
     })
 } satisfies FileRouter;
 
