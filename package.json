@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "project": "next build && next start"
+    "test": "jest"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.6.0",
