@@ -9,7 +9,6 @@ import { buttonVariants } from '../ui/button';
 
 interface ChatWrapperProps {
   fileId: string;
-  isSubscribed: boolean;
 }
 
 const ChatWrapper = ({ fileId }: ChatWrapperProps) => {
