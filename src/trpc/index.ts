@@ -3,11 +3,14 @@ import { privateProcedure, publicProcedure, router } from './trpc';
 import { TRPCError } from '@trpc/server';
 import { db } from "@/db";
 import { z } from 'zod';
+import { Client } from '@elastic/elasticsearch';
 
 {/*authCallBack is a GET request. Client side makes a GET request and the function checks if the user exists from Kinde. 
 If not, sends error 400 type. Then checks If user exists in db, if not 
 then create it in DB  */}
 type UploadStatus = 'PENDING' | 'PROCESSING' | 'SUCCESS' | 'FAILED';
+
+const client = new Client({ node: process.env.ELASTIC_SEARCH_PORT })
 
 export const appRouter = router({
   authCallback: publicProcedure.query(async () => {
@@ -43,6 +46,22 @@ export const appRouter = router({
       }
     })
 
+  }),
+  getSearchResults: privateProcedure.input(z.string()).query(async ({ input, ctx }) => {
+    const { user } = ctx
+
+    if (!user) throw new TRPCError({ code: 'NOT_FOUND' })
+
+    const result = await client.search({
+      index: 'pdf-search',
+      body: {
+        query: {
+          match: { content: input }
+        }
+      }
+    })
+
+    return result.hits.hits
   }),
 
   getFileUploadStatus: privateProcedure

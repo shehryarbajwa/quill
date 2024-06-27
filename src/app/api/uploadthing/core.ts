@@ -1,5 +1,6 @@
 import { db } from '@/db'
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server'
+import { indexFileToElasticsearch } from '@/app/api/elasticsearch';
 
 import {
   createUploadthing,
@@ -37,6 +38,8 @@ export const ourFileRouter = {
       try {
         const response = await fetch(`https://uploadthing-prod-sea1.s3.us-west-2.amazonaws.com/${file.key}`)
         const blob = await response.blob()
+
+        await indexFileToElasticsearch(file.key, file.name, metadata.userId)
       } catch {
 
       }

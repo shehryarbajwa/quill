@@ -12,12 +12,25 @@ interface PdfFullscreenProps {
 }
 
 const PdfFullscreen = ({ fileUrl }: PdfFullscreenProps) => {
+  const [isFullScreen, setIsFullScreen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [numPages, setNumPages] = useState<number>();
 
   const { toast } = useToast();
 
   const { width, ref } = useResizeDetector();
+
+  const toggleFullScreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen();
+      setIsFullScreen(true);
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+        setIsFullScreen(false);
+      }
+    }
+  };
 
   return (
     <Dialog

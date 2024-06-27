@@ -23,11 +23,11 @@ interface Props {
 
 export const ChatContextProvider = ({ fileId, children }: Props) => {
   const [message, setMessage] = useState('');
-  const [isLoading, setIsLoading] = useState<boolean>(false);  
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const { toast } = useToast();
 
   const { mutate: sendMessage } = useMutation({
-    mutationFn: async ({message} : {message: string}) => {
+    mutationFn: async ({ message }: { message: string }) => {
       const response = await fetch('/api/message', {
         method: 'POST',
         body: JSON.stringify({
@@ -42,13 +42,13 @@ export const ChatContextProvider = ({ fileId, children }: Props) => {
 
       return response.body;
     },
-  })
+  });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setMessage(e.target.value)
-  }
+    setMessage(e.target.value);
+  };
 
-  const addMessage = () => sendMessage({message})
+  const addMessage = () => sendMessage({ message });
 
   //Here we are use Context and then children
   return (
@@ -59,7 +59,6 @@ export const ChatContextProvider = ({ fileId, children }: Props) => {
         handleInputChange,
         isLoading,
       }}
-      {children}
     ></ChatContext.Provider>
   );
 };

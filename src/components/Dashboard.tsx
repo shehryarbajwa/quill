@@ -43,16 +43,16 @@ const Dashboard = () => {
         <UploadButton />
       </div>
 
-      {/* display all user files */}
+      {/* Display all user files */}
       {files && files?.length !== 0 ? (
         <ul className="mt-8 grid grid-cols-1 gap-6 divide-y divide-zinc-200 md:grid-cols-2 lg:grid-cols-3">
           {files
             .sort(
-              (a, b) =>
+              (a: { createdAt: string }, b: { createdAt: string }) =>
                 new Date(b.createdAt).getTime() -
                 new Date(a.createdAt).getTime()
             )
-            .map((file) => (
+            .map((file: { id: string; name: string; createdAt: string }) => (
               <li
                 key={file.id}
                 className="col-span-1 divide-y divide-gray-200 rounded-lg bg-white shadow transition hover:shadow-lg"
