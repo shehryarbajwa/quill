@@ -17,6 +17,9 @@ importers:
       '@langchain/openai':
         specifier: ^0.2.1
         version: 0.2.1(encoding@0.1.13)(langchain@0.2.7(@pinecone-database/pinecone@2.2.2)(encoding@0.1.13)(ignore@5.3.1)(openai@4.52.1(encoding@0.1.13))(pdf-parse@1.1.1))
+      '@langchain/pinecone':
+        specifier: ^0.0.7
+        version: 0.0.7(langchain@0.2.7(@pinecone-database/pinecone@2.2.2)(encoding@0.1.13)(ignore@5.3.1)(openai@4.52.1(encoding@0.1.13))(pdf-parse@1.1.1))(openai@4.52.1(encoding@0.1.13))
       '@pinecone-database/pinecone':
         specifier: ^2.2.2
         version: 2.2.2
@@ -943,6 +946,10 @@ packages:
 
   '@langchain/openai@0.2.1':
     resolution: {integrity: sha512-Ti3C6ZIUPaueIPAfMljMnLu3GSGNq5KmrlHeWkIbrLShOBlzj4xj7mRfR73oWgAC0qivfxdkfbB0e+WCY+oRJw==}
+    engines: {node: '>=18'}
+
+  '@langchain/pinecone@0.0.7':
+    resolution: {integrity: sha512-PQztQOjMyVSBz4AofpKMn619PyVVF6Gl0OJzubolZNUA4lbR3UR+kENEe81WD6RSbBy3K9brOfjDDYx1hmtqOw==}
     engines: {node: '>=18'}
 
   '@langchain/textsplitters@0.0.3':
@@ -2363,6 +2370,10 @@ packages:
   flat-cache@3.2.0:
     resolution: {integrity: sha512-CYcENa+FtcUKLmhhqyctpclsq7QF38pKjZHsGNiSQF5r4FtoKDWabFDl3hzaEQMvT1LHEysw5twgLvpYYb4vbw==}
     engines: {node: ^10.12.0 || >=12.0.0}
+
+  flat@5.0.2:
+    resolution: {integrity: sha512-b6suED+5/3rTpUBdG1gupIl8MPFCAMA0QXwmljLhvCUKcUvdE4gWky9zpuGCcXHOsz4J9wPGNWq6OKpmIzz3hQ==}
+    hasBin: true
 
   flatted@3.3.1:
     resolution: {integrity: sha512-X8cqMLLie7KsNUDSdzeN8FYK9rEt4Dt67OsG/DNGnYTSDBG4uFAJFBnUeiV+zCVAvwFy56IjM9sH51jVaEhNxw==}
@@ -5311,6 +5322,16 @@ snapshots:
       - encoding
       - langchain
 
+  '@langchain/pinecone@0.0.7(langchain@0.2.7(@pinecone-database/pinecone@2.2.2)(encoding@0.1.13)(ignore@5.3.1)(openai@4.52.1(encoding@0.1.13))(pdf-parse@1.1.1))(openai@4.52.1(encoding@0.1.13))':
+    dependencies:
+      '@langchain/core': 0.2.10(langchain@0.2.7(@pinecone-database/pinecone@2.2.2)(encoding@0.1.13)(ignore@5.3.1)(openai@4.52.1(encoding@0.1.13))(pdf-parse@1.1.1))(openai@4.52.1(encoding@0.1.13))
+      '@pinecone-database/pinecone': 2.2.2
+      flat: 5.0.2
+      uuid: 9.0.1
+    transitivePeerDependencies:
+      - langchain
+      - openai
+
   '@langchain/textsplitters@0.0.3(langchain@0.2.7(@pinecone-database/pinecone@2.2.2)(encoding@0.1.13)(ignore@5.3.1)(openai@4.52.1(encoding@0.1.13))(pdf-parse@1.1.1))(openai@4.52.1(encoding@0.1.13))':
     dependencies:
       '@langchain/core': 0.2.10(langchain@0.2.7(@pinecone-database/pinecone@2.2.2)(encoding@0.1.13)(ignore@5.3.1)(openai@4.52.1(encoding@0.1.13))(pdf-parse@1.1.1))(openai@4.52.1(encoding@0.1.13))
@@ -6982,6 +7003,8 @@ snapshots:
       flatted: 3.3.1
       keyv: 4.5.4
       rimraf: 3.0.2
+
+  flat@5.0.2: {}
 
   flatted@3.3.1: {}
 

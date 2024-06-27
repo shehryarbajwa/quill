@@ -8,8 +8,9 @@ import {
 
 import { PDFLoader } from 'langchain/document_loaders/fs/pdf';
 import { OpenAIEmbeddings } from "@langchain/openai";
+
+import { PineconeStore } from '@langchain/pinecone';
 import { pinecone } from '@/lib/pinecone';
-import { env } from 'process';
 
 const f = createUploadthing();
 
@@ -57,7 +58,28 @@ export const ourFileRouter = {
           openAIApiKey: process.env.OPENAI_API_KEY
         })
 
+        await PineconeStore.fromDocuments(pageLevelDocs, embeddings, {
+          pineconeIndex,
+          namespace: createdFile.id
+        })
+
+        await db.file.update({
+          data: {
+            uploadStatus: "SUCCESS"
+          },
+          where: {
+            id: createdFile.id
+          }
+        })
       } catch (err) {
+        await db.file.update({
+          data: {
+            uploadStatus: 'FAILED'
+          },
+          where: {
+            id: createdFile.id
+          }
+        })
 
       }
     })
