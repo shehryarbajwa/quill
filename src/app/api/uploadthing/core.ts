@@ -6,6 +6,11 @@ import {
   type FileRouter,
 } from 'uploadthing/next'
 
+import { PDFLoader } from 'langchain/document_loaders/fs/pdf';
+import { OpenAIEmbeddings } from "@langchain/openai";
+import { pinecone } from '@/lib/pinecone';
+import { env } from 'process';
+
 const f = createUploadthing();
 
 export const ourFileRouter = {
@@ -37,7 +42,22 @@ export const ourFileRouter = {
       try {
         const response = await fetch(`https://uploadthing-prod-sea1.s3.us-west-2.amazonaws.com/${file.key}`)
         const blob = await response.blob()
-      } catch {
+
+        const loader = new PDFLoader(blob)
+
+        const pageLevelDocs = await loader.load()
+
+        const pagesAmt = pageLevelDocs.length
+
+        // vectorize and index the entire document
+
+        const pineconeIndex = pinecone.Index('quill')
+
+        const embeddings = new OpenAIEmbeddings({
+          openAIApiKey: process.env.OPENAI_API_KEY
+        })
+
+      } catch (err) {
 
       }
     })
