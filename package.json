@@ -12,6 +12,7 @@
   "dependencies": {
     "@hookform/resolvers": "^3.6.0",
     "@kinde-oss/kinde-auth-nextjs": "^2.2.10",
+    "@langchain/community": "^0.2.17",
     "@langchain/openai": "^0.2.1",
     "@langchain/pinecone": "^0.0.7",
     "@pinecone-database/pinecone": "^2.2.2",

@@ -6,11 +6,11 @@ import {
   type FileRouter,
 } from 'uploadthing/next'
 
-import { PDFLoader } from 'langchain/document_loaders/fs/pdf';
+import { PDFLoader } from '@langchain/community/document_loaders/fs/pdf';
 import { OpenAIEmbeddings } from "@langchain/openai";
 
 import { PineconeStore } from '@langchain/pinecone';
-import { pinecone } from '@/lib/pinecone';
+import { pc } from '@/lib/pinecone';
 
 const f = createUploadthing();
 
@@ -50,18 +50,21 @@ export const ourFileRouter = {
 
         const pagesAmt = pageLevelDocs.length
 
-        // vectorize and index the entire document
+        const pineconeIndex = pc.Index('quill');
 
-        const pineconeIndex = pinecone.Index('quill')
+
 
         const embeddings = new OpenAIEmbeddings({
-          openAIApiKey: process.env.OPENAI_API_KEY
+          openAIApiKey: process.env.OPENAI_API_KEY!
         })
 
+
+        console.log('Starting document vectorization and indexing');
         await PineconeStore.fromDocuments(pageLevelDocs, embeddings, {
           pineconeIndex,
           namespace: createdFile.id
         })
+        console.log('Document vectorization and indexing complete');
 
         await db.file.update({
           data: {
@@ -72,6 +75,7 @@ export const ourFileRouter = {
           }
         })
       } catch (err) {
+        console.log('err', err)
         await db.file.update({
           data: {
             uploadStatus: 'FAILED'
