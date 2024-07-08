@@ -50,7 +50,7 @@ export const ourFileRouter = {
 
         const pagesAmt = pageLevelDocs.length
 
-        const pineconeIndex = pc.Index('quill');
+        const pineconeIndex = pc.Index(process.env.PINECONE_INDEX_NAME!);
 
 
 
