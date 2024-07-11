@@ -3,6 +3,7 @@ import { privateProcedure, publicProcedure, router } from './trpc';
 import { TRPCError } from '@trpc/server';
 import { db } from "@/db";
 import { z } from 'zod';
+import { INFINITE_QUERY_LIMIT } from "@/config/infinite-query";
 
 {/*authCallBack is a GET request. Client side makes a GET request and the function checks if the user exists from Kinde. 
 If not, sends error 400 type. Then checks If user exists in db, if not 
@@ -43,6 +44,28 @@ export const appRouter = router({
       }
     })
 
+  }),
+  getFileMessages: privateProcedure.input(z.object({
+    limit: z.number().min(1).max(100).nullish(),
+    cursor: z.string().nullish(),
+    fileId: z.string()
+  })).query(async ({ ctx, input }) => {
+    const { userId } = ctx;
+    const { fileId, cursor } = input
+    const limit = input.limit ?? INFINITE_QUERY_LIMIT
+
+    const file = await db.file.findFirst({
+      where: {
+        id: fileId,
+        userId
+      }
+    })
+
+    if (!file) throw new TRPCError({ code: "NOT_FOUND" })
+
+    const messages = await db.message.findMany({
+      take: limit + 1
+    })
   }),
 
   getFileUploadStatus: privateProcedure

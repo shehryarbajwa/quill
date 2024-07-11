@@ -7,6 +7,7 @@ import { ChevronLeft, Loader2, XCircle } from 'lucide-react';
 import Link from 'next/link';
 import { buttonVariants } from '../ui/button';
 import { ChatContextProvider } from './ChatContext';
+import { PLANS } from '@/config/stripe';
 
 interface ChatWrapperProps {
   fileId: string;
@@ -25,6 +26,8 @@ const ChatWrapper = ({ fileId }: ChatWrapperProps) => {
           : 500,
     }
   );
+
+  console.log('data', data);
 
   if (isLoading)
     return (
@@ -54,7 +57,7 @@ const ChatWrapper = ({ fileId }: ChatWrapperProps) => {
           </div>
         </div>
 
-        <ChatInput isDisabled />
+        <ChatInput isDisabled={true} />
       </div>
     );
 
@@ -79,7 +82,7 @@ const ChatWrapper = ({ fileId }: ChatWrapperProps) => {
           </div>
         </div>
 
-        <ChatInput isDisabled />
+        <ChatInput isDisabled={true} />
       </div>
     );
 
@@ -89,6 +92,8 @@ const ChatWrapper = ({ fileId }: ChatWrapperProps) => {
         <div className="flex-1 justify-between flex flex-col mb-28">
           <Messages />
         </div>
+
+        <ChatInput isDisabled={false} />
       </div>
     </ChatContextProvider>
   );

@@ -50,7 +50,6 @@ export const ChatContextProvider = ({ fileId, children }: Props) => {
 
   const addMessage = () => sendMessage({ message });
 
-  //Here we are use Context and then children
   return (
     <ChatContext.Provider
       value={{
@@ -59,7 +58,8 @@ export const ChatContextProvider = ({ fileId, children }: Props) => {
         handleInputChange,
         isLoading,
       }}
-      // {children}
-    ></ChatContext.Provider>
+    >
+      {children}
+    </ChatContext.Provider>
   );
 };
