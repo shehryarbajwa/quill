@@ -64,8 +64,32 @@ export const appRouter = router({
     if (!file) throw new TRPCError({ code: "NOT_FOUND" })
 
     const messages = await db.message.findMany({
-      take: limit + 1
+      take: limit + 1,
+      where: {
+        fileId
+      },
+      orderBy: {
+        createdAt: 'desc'
+      },
+      cursor: cursor ? { id: cursor } : undefined,
+      select: {
+        id: true,
+        isUserMessage: true,
+        createdAt: true,
+        text: true
+      }
     })
+
+    let nextCursor: typeof cursor | undefined = undefined
+    if (messages.length > limit) {
+      const nextItem = messages.pop()
+      nextCursor = nextItem?.id
+
+      return {
+        messages,
+        nextCursor,
+      }
+    }
   }),
 
   getFileUploadStatus: privateProcedure
