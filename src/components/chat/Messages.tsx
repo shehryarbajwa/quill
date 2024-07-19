@@ -1,6 +1,7 @@
 import { trpc } from '@/app/_trpc/client';
 import { INFINITE_QUERY_LIMIT } from '@/config/infinite-query';
-import { Loader2 } from 'lucide-react';
+import { Loader2, MessageSquare } from 'lucide-react';
+import Skeleton from 'react-loading-skeleton';
 
 interface MessagesProps {
   fileId: string;
@@ -15,11 +16,13 @@ const Messages = ({ fileId }: MessagesProps) => {
       },
       {
         getNextPageParam: (lastPage) => lastPage?.nextCursor,
-        keepPreviousData: true,
       }
     );
 
+  console.log('data', data?.pages);
+
   const messages = data?.pages.flatMap((page) => page?.messages);
+  console.log('messages', messages);
 
   const loadingMessage = {
     createdAt: new Date().toISOString(),
@@ -50,9 +53,20 @@ const Messages = ({ fileId }: MessagesProps) => {
           } else return <Message />;
         })
       ) : isLoading ? (
-        <div></div>
+        <div className="w-full flex flex-col gap-2">
+          <Skeleton className="h-16" />
+          <Skeleton className="h-16" />
+          <Skeleton className="h-16" />
+          <Skeleton className="h-16" />
+        </div>
       ) : (
-        <div></div>
+        <div className="flex-1 flex flex-col items-center justify-center gap-2">
+          <MessageSquare className="h-8 w-8 text-blue-500 " />
+          <h3 className="font-semibold text-xl">You&apos;re all set!</h3>
+          <p className="text-zinc-500 text-sm">
+            Ask your first question to get started
+          </p>
+        </div>
       )}
     </div>
   );
