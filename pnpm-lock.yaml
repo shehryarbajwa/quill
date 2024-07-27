@@ -23,6 +23,9 @@ importers:
       '@langchain/pinecone':
         specifier: ^0.0.7
         version: 0.0.7(langchain@0.2.7(@pinecone-database/pinecone@2.2.2)(encoding@0.1.13)(ignore@5.3.1)(openai@4.52.3(encoding@0.1.13))(pdf-parse@1.1.1))(openai@4.52.3(encoding@0.1.13))
+      '@mantine/hooks':
+        specifier: ^7.11.2
+        version: 7.11.2(react@18.3.1)
       '@pinecone-database/pinecone':
         specifier: ^2.2.2
         version: 2.2.2
@@ -1411,6 +1414,11 @@ packages:
   '@langchain/textsplitters@0.0.3':
     resolution: {integrity: sha512-cXWgKE3sdWLSqAa8ykbCcUsUF1Kyr5J3HOWYGuobhPEycXW4WI++d5DhzdpL238mzoEXTi90VqfSCra37l5YqA==}
     engines: {node: '>=18'}
+
+  '@mantine/hooks@7.11.2':
+    resolution: {integrity: sha512-jhyVe/sbDEG2U8rr2lMecUPgQxcfr5hh9HazqGfkS7ZRIMDO7uJ947yAcTMGGkp5Lxtt5TBFt1Cb6tiB2/1agg==}
+    peerDependencies:
+      react: ^18.2.0
 
   '@mapbox/node-pre-gyp@1.0.11':
     resolution: {integrity: sha512-Yhlar6v9WQgUp/He7BdgzOz8lqMQ8sU+jkCq7Wx8Myc5YFJLbEe7lgui/V7G1qB1DJykHSGwreceSaD60Y0PUQ==}
@@ -6501,6 +6509,10 @@ snapshots:
     transitivePeerDependencies:
       - langchain
       - openai
+
+  '@mantine/hooks@7.11.2(react@18.3.1)':
+    dependencies:
+      react: 18.3.1
 
   '@mapbox/node-pre-gyp@1.0.11(encoding@0.1.13)':
     dependencies:
