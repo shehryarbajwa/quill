@@ -21,7 +21,7 @@ const ChatInput = ({ isDisabled }: ChatInputProps) => {
           <div className="relative flex flex-col w-full flex-grow p-4">
             <div className="relative">
               <Textarea
-                rows={3}
+                rows={1}
                 ref={textareaRef}
                 maxRows={4}
                 autoFocus
