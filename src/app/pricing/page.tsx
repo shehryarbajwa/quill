@@ -1,4 +1,5 @@
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
+import UpgradeButton from '@/components/UpgradeButton';
 import { buttonVariants } from '@/components/ui/button';
 import {
   Tooltip,
@@ -9,11 +10,12 @@ import {
 import { PLANS } from '@/config/stripe';
 import { cn } from '@/lib/utils';
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
-import { Check, HelpCircle, Minus } from 'lucide-react';
+import { ArrowRight, Check, HelpCircle, Minus } from 'lucide-react';
+import Link from 'next/link';
 
-const Page = () => {
+const Page = async () => {
   const { getUser } = getKindeServerSession();
-  const user = getUser();
+  const user = await getUser();
 
   const pricingItems = [
     {
@@ -170,15 +172,30 @@ const Page = () => {
                     ))}
                   </ul>
                   <div className="border-t border-gray-200" />
-                  <div className='p-5'>
+                  <div className="p-5">
                     {plan === 'Free' ? (
-
-                    ): user ? (
+                      <Link
+                        href={user ? '/dashboard' : '/sign-in'}
+                        className={buttonVariants({
+                          className: 'w-full',
+                          variant: 'secondary',
+                        })}
+                      >
+                        {user ? 'Upgrade Now' : 'Sign up'}
+                        <ArrowRight className="h-5 w-5 ml-1.5" />
+                      </Link>
+                    ) : user ? (
                       <UpgradeButton />
-                    ): (
-                      <Link href='/sign-in' className={buttonVariants({
-                        className: 'w-full'
-                      })}></Link>
+                    ) : (
+                      <Link
+                        href="/sign-in"
+                        className={buttonVariants({
+                          className: 'w-full',
+                        })}
+                      >
+                        {user ? 'Upgrade Now' : 'Sign up'}
+                        <ArrowRight className="h-5 w-5 ml-1.5" />
+                      </Link>
                     )}
                   </div>
                 </div>
