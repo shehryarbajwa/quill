@@ -1,3 +1,5 @@
+
+import { db } from '@/db'
 import { stripe } from '@/lib/stripe'
 import { headers } from 'next/headers'
 import type Stripe from 'stripe'
@@ -36,6 +38,18 @@ export async function POST(request: Request) {
       await stripe.subscriptions.retrieve(
         session.subscription as string
       )
+
+    await db.user.update({
+      where: {
+        id: session.metadata.userId,
+      },
+      data: {
+        stripeSubscriptionId: subscription.id,
+        stripeCustomerId: subscription.customer as string,
+        stripePriceId: subscription.items.data[0]?.price.id,
+        stripeCurrentPeriodEnd: new Date(subscription.current_period_end * 1000),
+      }
+    })
   }
 
   if (event.type === 'invoice.payment_succeeded') {
@@ -44,6 +58,16 @@ export async function POST(request: Request) {
       await stripe.subscriptions.retrieve(
         session.subscription as string
       )
+
+    await db.user.update({
+      where: {
+        stripeSubscriptionId: subscription.id,
+      },
+      data: {
+        stripePriceId: subscription.items.data[0]?.price.id,
+        stripeCurrentPeriodEnd: new Date(subscription.current_period_end * 1000),
+      }
+    })
   }
 
   return new Response(null, { status: 200 })
