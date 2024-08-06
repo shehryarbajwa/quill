@@ -22,20 +22,19 @@ interface BillingFormProps {
 const BillingForm = ({ subscriptionPlan }: BillingFormProps) => {
   const { toast } = useToast();
 
-  const { mutate: createStripeSession, isLoading } =
-    trpc.createStripeSession.useMutation({
-      onSuccess: ({ url }) => {
-        if (url) window.location.href = url;
+  const { mutate: createStripeSession } = trpc.createStripeSession.useMutation({
+    onSuccess: ({ url }) => {
+      if (url) window.location.href = url;
 
-        if (!url) {
-          toast({
-            title: 'There was a problem',
-            description: 'Please try again',
-            variant: 'destructive',
-          });
-        }
-      },
-    });
+      if (!url) {
+        toast({
+          title: 'There was a problem',
+          description: 'Please try again',
+          variant: 'destructive',
+        });
+      }
+    },
+  });
   return (
     <MaxWidthWrapper className="max-w-5xl">
       <form
