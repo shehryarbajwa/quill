@@ -22,11 +22,8 @@ const Messages = ({ fileId }: MessagesProps) => {
       },
       {
         getNextPageParam: (lastPage) => lastPage?.nextCursor,
-        keepPreviousData: true,
       }
     );
-
-  console.log('data', data?.pages);
 
   const messages = data?.pages.flatMap((page) => page?.messages);
   console.log('messages', messages);
