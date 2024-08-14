@@ -25,3 +25,25 @@ export function absoluteUrl(path: string) {
   return `http://localhost:${defaultPort}${path}`;
 }
 
+export function constructMetadata({
+  title = "Quill - The AI-powered platform for modern knowledge management",
+  description = "Quill is an AI-powered platform that makes it easy to manage your knowledge, so you can focus on what's important. It's like having your own personal library, but with the power of AI.",
+  image = "/thumbnail.png",
+  icons = "/icons.png",
+  noIndex = false,
+}: {
+  title?: string;
+  description?: string;
+  image?: string;
+  icons?: string;
+  noIndex?: boolean;
+} = {}) {
+  const metadata = {
+    title,
+    description,
+    image,
+    icons,
+    noIndex,
+  }
+}
+
