@@ -1,4 +1,5 @@
 import { type ClassValue, clsx } from "clsx"
+import { Metadata } from "next";
 import { twMerge } from "tailwind-merge"
 
 {/* This function allows to merge an incoming CSS className with another CSSclassName */ }
@@ -37,13 +38,28 @@ export function constructMetadata({
   image?: string;
   icons?: string;
   noIndex?: boolean;
-} = {}) {
-  const metadata = {
+} = {}): Metadata {
+  return {
     title,
     description,
-    image,
+    openGraph: {
+      title,
+      description,
+      images: [{
+        url: image,
+      }],
+    },
     icons,
-    noIndex,
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [image],
+      creator: "@sbajwa12",
+    },
+    metadataBase: new URL('https://quill-five-ashen.vercel.app/'),
+    themeColor: "#FFF",
+    ...(noIndex && { robots: { index: false, follow: false } }),
   }
 }
 
