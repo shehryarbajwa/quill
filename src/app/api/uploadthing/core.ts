@@ -125,10 +125,10 @@ const onUploadComplete = async ({ metadata, file }: {
 
 
 export const ourFileRouter = {
-  freeplanUploader: f({ pdf: { maxFileSize: "4MB" } })
+  freePlanUploader: f({ pdf: { maxFileSize: "4MB" } })
     .middleware(middleware)
     .onUploadComplete(onUploadComplete),
-  proplanUploader: f({ pdf: { maxFileSize: "16MB" } })
+  proPlanUploader: f({ pdf: { maxFileSize: "16MB" } })
     .middleware(middleware)
     .onUploadComplete(onUploadComplete),
 
