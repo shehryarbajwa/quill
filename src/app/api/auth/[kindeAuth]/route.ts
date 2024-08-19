@@ -1,34 +1,42 @@
 import { NextRequest } from 'next/server';
-import { handleAuth } from '@kinde-oss/kinde-auth-nextjs/server';
 
-export async function GET(req: NextRequest, { params }: { params: { kindeAuth: string } }): Promise<Response> {
+export async function GET(req: NextRequest) {
+  const url = new URL(req.url);
+  const code = url.searchParams.get('code');
+
+  if (!code) {
+    return new Response('No code provided', { status: 400 });
+  }
+
   try {
-    // Log environment variables and params
-    console.log('kindeAuth:', params.kindeAuth);
-    console.log('Environment Variables:');
-    console.log('KINDE_CLIENT_ID:', process.env.KINDE_CLIENT_ID);
-    console.log('KINDE_CLIENT_SECRET:', process.env.KINDE_CLIENT_SECRET);
-    console.log('KINDE_ISSUER_URL:', process.env.KINDE_ISSUER_URL);
-    console.log('KINDE_SITE_URL:', process.env.KINDE_SITE_URL);
-    console.log('KINDE_POST_LOGOUT_REDIRECT_URL:', process.env.KINDE_POST_LOGOUT_REDIRECT_URL);
-    console.log('KINDE_POST_LOGIN_REDIRECT_URL:', process.env.KINDE_POST_LOGIN_REDIRECT_URL);
+    const response = await fetch('https://barfi.kinde.com/oauth2/token', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: new URLSearchParams({
+        grant_type: 'authorization_code',
+        code: code,
+        redirect_uri: 'https://quill-five-ashen.vercel.app/api/auth/kinde_callback',
+        client_id: process.env.KINDE_CLIENT_ID as string,
+        client_secret: process.env.KINDE_CLIENT_SECRET as string
+      })
+    });
 
-    // Log the incoming request
-    console.log('Request Headers:', req.headers);
-    console.log('Request Method:', req.method);
-    console.log('Request URL:', req.url);
+    const data = await response.json();
 
-    // Make sure to await handleAuth since it is likely a promise
-    const result = await handleAuth(req, params.kindeAuth);
+    if (!response.ok) {
+      console.error('Error fetching token:', data);
+      return new Response('Authentication failed', { status: 400 });
+    }
 
-    // Log the result of handleAuth
-    console.log('Authentication Result:', result);
+    // Handle the token (e.g., save it to session or cookies)
+    console.log('Authentication successful, token data:', data);
 
-    // Return the result as a proper Response object
-    return new Response(JSON.stringify(result), { status: 200 });
+    // Redirect the user or return a success response
+    return new Response('Authentication successful', { status: 200 });
   } catch (error) {
-    // Log any errors that occur
-    console.error('Error occurred:', error);
-    return new Response(JSON.stringify({ error: 'Internal Server Error' }), { status: 500 });
+    console.error('Error during token exchange:', error);
+    return new Response('Internal Server Error', { status: 500 });
   }
 }
