@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
     await sendSlackNotification(
       "A new user has signed up!",
       user.given_name || user.family_name ? `${user.given_name || ''} ${user.family_name || ''}`.trim() : "Unknown",
-      user.email || "No email"
+      user.email || "No email found"
     );
   }
 
