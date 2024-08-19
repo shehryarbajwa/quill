@@ -6,4 +6,9 @@ export async function GET(req: NextRequest, { params }: { params: { kindeAuth: s
 
   console.log('kindeAuth:The params going on here are:', kindeAuth);
 
+  // Make sure to await handleAuth since it is likely a promise
+  const result = await handleAuth(req, kindeAuth);
+
+  // Return the result as a proper Response object
+  return new Response(JSON.stringify(result), { status: 200 });
 }
