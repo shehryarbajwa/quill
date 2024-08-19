@@ -6,15 +6,6 @@ export async function GET(req: NextRequest) {
   // Log the entire URL for debugging
   console.log('Callback URL:', url.toString());
 
-  // Extract the 'code' parameter
-  const code = url.searchParams.get('code');
-
-  // Log the extracted code
-  console.log('Authorization Code:', code);
-
-  if (!code) {
-    return new Response('No code provided', { status: 400 });
-  }
 
   try {
     const response = await fetch('https://barfi.kinde.com/oauth2/token', {
@@ -24,7 +15,6 @@ export async function GET(req: NextRequest) {
       },
       body: new URLSearchParams({
         grant_type: 'authorization_code',
-        code: code,
         redirect_uri: 'https://quill-five-ashen.vercel.app/api/auth/kinde_callback',
         client_id: process.env.KINDE_CLIENT_ID as string,
         client_secret: process.env.KINDE_CLIENT_SECRE as string,
