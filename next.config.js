@@ -4,7 +4,7 @@ const nextConfig = {
     return [
       {
         source: '/sign-in',
-        destination: '/api/auth/kindeAuth',
+        destination: '/api/auth/login',
         permanent: true,
       },
       {
