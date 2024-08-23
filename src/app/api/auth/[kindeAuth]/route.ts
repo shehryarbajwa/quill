@@ -6,6 +6,15 @@ export async function GET(
   { params }: { params: { kindeAuth: string } }
 ): Promise<NextResponse> {
   const endpoint = params.kindeAuth
-  const authResponse = await handleAuth(request, endpoint)
-  return NextResponse.json(authResponse)
+  console.log('Endpoint:', endpoint)
+  console.log('Request URL:', request.url)
+
+  try {
+    const authResponse = await handleAuth(request, endpoint)
+    console.log('Auth Response:', authResponse)
+    return NextResponse.json(authResponse)
+  } catch (error) {
+    console.error('Auth Error:', error)
+    return NextResponse.json({ error: 'Authentication failed' }, { status: 500 })
+  }
 }
