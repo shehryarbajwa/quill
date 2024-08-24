@@ -14,25 +14,23 @@ export const metadata = constructMetadata();
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en" className="light">
-      <KindeProvider>
-        <Providers>
-          <body
-            className={cn(
-              'min-h-screen font-sans antialiased grainy',
-              inter.className
-            )}
-          >
-            <Toaster />
-            <Navbar />
-            {children}
-          </body>
-        </Providers>
-      </KindeProvider>
+      <Providers>
+        <body
+          className={cn(
+            'min-h-screen font-sans antialiased grainy',
+            inter.className
+          )}
+        >
+          <Toaster />
+          <Navbar />
+          {children}
+        </body>
+      </Providers>
     </html>
   );
 }
